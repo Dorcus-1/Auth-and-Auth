@@ -1,30 +1,36 @@
-const express = require('express');
+const express = require('express')
 const app = express();
 const  mongoose = require('mongoose');
 const dotenv = require('dotenv');
-dotenv.config({path:'./config.env'});
+const router = require('./routes/login')
+var bodyParser=require("body-parser");
+
+dotenv.config();
 
 // connect to database
 
-const db= process.env.DATABASE_LOCAL;
 
-mongoose.connect(db)
-.then(() => {
-    console.log("Successfully connected to database🥳");
-})
-.catch((error) => {
- console.log("database connection failed. exiting now🎆...");
- console.error(error);
- process.exit(1);
-});
+const database = process.env.MONGOLAB_URI;
 
+mongoose.connect(database, {useUnifiedTopology: true, useNewUrlParser: true })
+.then(() => console.log('Database connected'))
+.catch(err => console.log(err));
 
+app.use(express.json())
 app.set('view engine', 'ejs');
 
 //Routes
-app.use('/', require('./routes/login'));
+// app.use('/', require('./routes/login'));
+app.use('/api/',router)
+
+app.use(express.urlencoded({extended: false}));
+
+
+// fetch('http://localhost:5000/register')
+//   .then((response) => response.json())
+//   .then((data) => console.log(data));
 
 
 
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, console.log("Server has started at port: " + PORT))
