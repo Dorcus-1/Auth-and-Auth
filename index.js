@@ -4,7 +4,7 @@ const  mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const router = require('./routes/login')
 var bodyParser=require("body-parser");
-
+const cors = require('cors');
 dotenv.config();
 
 // connect to database
@@ -18,7 +18,7 @@ mongoose.connect(database, {useUnifiedTopology: true, useNewUrlParser: true })
 
 app.use(express.json())
 app.set('view engine', 'ejs');
-
+app.use(cors());
 //Routes
 // app.use('/', require('./routes/login'));
 app.use('/api/',router)

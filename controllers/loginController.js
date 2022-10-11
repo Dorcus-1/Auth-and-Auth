@@ -1,67 +1,9 @@
 //For Register Page
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
-const express = require("express")
-// const registerView = (req, res) => {
-//     res.render("register", {
+const express = require("express");
+const _ = require("lodash");
 
-//     } );
-// }
-
-// For View 
-// const loginView = (req, res) => {
-
-//     res.render("login", {
-
-//     } );
-// }
-
-//Post Request that handles Register
-// const registerUser = (req, res) => {
-//   //  const  registration = (req,res)=>{
-//   //   const { name, email, password} = req.body
-//   //  }
-//    const newUser = new User(
-//     {
-//     name :req.body.name,
-//     email :req.body.email,
-//     password :req.body.password,
-//   });
-    
-//     if (!name || !email || !password ) {
-//       console.log("Fill empty fields");
-//     }
-//     //Confirm Passwords
-//     if (password !== confirm) {
-//       console.log("Password must match");
-//     } else {
-//       //Validation
-//       User.findOne({ email: email }).then((user) => {
-//         if (user) {
-//           console.log("email exists");
-//           res.render("register", {
-//             name,
-//             email,
-//             password,
-//           });
-//         } else {
-//           //Validation
-         
-//           //Password Hashing
-//           bcrypt.genSalt(10, (err, salt) =>
-//             bcrypt.hash(newUser.password, salt, (err, hash) => {
-//               if (err) throw err;
-//               newUser.password = hash;
-//               newUser
-//                 .save()
-//                 .then(res.redirect("/login"))
-//                 .catch((err) => console.log(err));
-//             })
-//           );
-//         }
-//       });
-//     }
-//   };
 
 exports.signup = ()=>{
 return  async(req,res) =>{
@@ -73,6 +15,37 @@ return  async(req,res) =>{
  await newUser.save();
  res.status(200);
  res.send(newUser);
+
+  //Confirm Passwords
+// if (password !== confirm) {
+//     console.log("Password must match");
+//   }
 }
 
+}
+
+exports.update = ()=>{
+  return async(req,res)=>{
+   const updates = _.pick(req.body, ['name','email','password']);
+  User.findByIdAndUpdate(req.params.id, 
+    { 
+      name:updates.name,
+      email:updates.email,
+      password:updates.password
+    },(err,res) =>{
+      if(err){
+        console.log(err);
+      }
+      else{
+        res.json({message:"User is updated"});
+      }
+    })
+  }
+}
+
+exports.delete = ()=>{
+  return async(req,res)=>{
+    User.findByIdAndDelete(req.params.id)
+    res.json({message:"User deleted successfully",sucess:'true'})
+  }
 }
