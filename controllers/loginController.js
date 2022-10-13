@@ -32,20 +32,21 @@ exports.update = ()=>{
       name:updates.name,
       email:updates.email,
       password:updates.password
-    },(err,res) =>{
+    },(err) =>{
       if(err){
         console.log(err);
       }
       else{
-        res.json({message:"User is updated"});
+         res.json({ newUser:updates, message:updates.message,success:true });
+        // res.send(updates);
       }
     })
   }
 }
 
-exports.delete = ()=>{
+exports.deleteUser = ()=>{
   return async(req,res)=>{
-    User.findByIdAndDelete(req.params.id)
+    User.findByIdAndDelete(req.params.id);
     res.json({message:"User deleted successfully",sucess:'true'})
   }
 }
