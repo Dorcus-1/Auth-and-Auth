@@ -6,6 +6,6 @@ const {deleteUser} = require('../controllers/loginController');
 const router = express.Router();
 router.post('/register', signup());
 router.put('/update/:_id', update());
-router.delete('/delete/:id', deleteUser());
+router.delete('/delete/:_id', deleteUser());
 
 module.exports = router;
